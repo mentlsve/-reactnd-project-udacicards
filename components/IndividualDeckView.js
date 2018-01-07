@@ -107,10 +107,12 @@ mapStateToProps = (state, ownProps) => {
 
     console.log('IndividualDeckView mapStateToProps', {
         key: ownProps.navigation.state.params.key,
-        decks: state.decks
+        decks: state.decks,
+        cardCount: state.decks[ownProps.navigation.state.params.key].questions.length
     })
     return {
-        deck: state.decks[ownProps.navigation.state.params.key]
+        deck: state.decks[ownProps.navigation.state.params.key],
+        cardCount: state.decks[ownProps.navigation.state.params.key].questions.length
     }
 }
 

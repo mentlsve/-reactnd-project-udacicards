@@ -22,10 +22,7 @@ function deckReducer(state = {}, action) {
                 ...state,
                 decks: {
                     ...state.decks,
-                    [action.deckTitle]: {
-                        ...state.decks[action.deckTitle],
-                        questions: insertCard(state.decks, action.deckTitle, action.card)
-                    }
+                    [action.deckTitle]: insertCard(state.decks, action.deckTitle, action.card)
                 }
             }
             console.log(JSON.stringify(newState))

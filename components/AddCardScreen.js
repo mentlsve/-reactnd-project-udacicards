@@ -62,8 +62,8 @@ class AddCardScreen extends Component {
             answer: 'Yes'
         })
 
+        //this.props.navigation.navigate('IndividualDeckView', {key: this.props.currentDeck.title})
         this.props.navigation.goBack()
-
     }
 
     render() {
