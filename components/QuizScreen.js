@@ -3,16 +3,11 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import AppStatusBar from './AppStatusBar';
 import DefaultButton from './DefaultButton'
 import styled from 'styled-components/native'
+import { DefaultScreenContainer, BottomButtonContainer} from './DefaultScreenContainer'
+import { setLocalNotification, clearLocalNotification} from '../util'
 
 const ANSWER_YES = 'Yes'
 const ANSWER_NO = 'No'
-
-
-const ScreenContainer = styled.View`
-    justify-content: space-between;
-    align-items: stretch;
-    flex: 1;
-`
 
 const QuestionContainer = styled.View`
     margin-top: 120;
@@ -30,6 +25,10 @@ const QuestionText = styled.Text`
     text-align: center
 `
 
+const TextButton = styled.Text`
+   color: blue
+`
+
 class QuizView extends Component {
 
     state = {
@@ -43,9 +42,6 @@ class QuizView extends Component {
     }
 
     handleResponse = (answer) => {
-
-        console.log(this.state)
-
         let newCorrectAnswersCount = this.state.correctAnswersCount
         let newWrongAnswersCount = this.state.wrongAnswersCount
 
@@ -55,6 +51,10 @@ class QuizView extends Component {
             newWrongAnswersCount = this.state.wrongAnswersCount + 1
 
         const newQuizFinishedValue = this.state.questionIndex === this.state.questionsCount - 1
+
+        if(newQuizFinishedValue) {
+            clearLocalNotification().then(setLocalNotification)
+        }
 
         this.setState({
             correctAnswersCount: newCorrectAnswersCount,
@@ -76,16 +76,12 @@ class QuizView extends Component {
             question: deck.questions[0].question,
             answer: deck.questions[0].answer,
         })
-
-        console.log('componentDidMount ', this.state)
     }
 
     toggleViewAnswer = () => {
         this.setState({
             viewAnswer: !this.state.viewAnswer
         })
-
-        console.log('toggleViewAnswer',this.state)
     }
 
 
@@ -94,16 +90,15 @@ class QuizView extends Component {
         const { deck } = this.props.navigation.state.params
 
         return (
-            <ScreenContainer>
-                <AppStatusBar />
+            <DefaultScreenContainer>
                 {!this.state.quizFinished && !this.state.viewAnswer &&
-                    <ScreenContainer>
+                    <DefaultScreenContainer>
                         <QuestionContainer>
                             <QuestionText>{this.state.question}</QuestionText>
                             <TouchableOpacity onPress={this.toggleViewAnswer}>
-                                <Text>
+                                <TextButton>
                                     View Answer
-                                </Text>
+                                </TextButton>
                             </TouchableOpacity>
                         </QuestionContainer>
                         <ButtonContainer>
@@ -114,16 +109,16 @@ class QuizView extends Component {
                                 Incorrect
                     </DefaultButton>
                         </ButtonContainer>
-                    </ScreenContainer>
+                    </DefaultScreenContainer>
                 }
                 {!this.state.quizFinished && this.state.viewAnswer &&
-                    <ScreenContainer>
+                    <DefaultScreenContainer>
                         <QuestionContainer>
                             <QuestionText>{this.state.answer}!</QuestionText>
                             <TouchableOpacity onPress={this.toggleViewAnswer}>
-                                <Text>
+                                <TextButton>
                                     View Question
-                                </Text>
+                                </TextButton>
                             </TouchableOpacity>
                         </QuestionContainer>
                         <ButtonContainer>
@@ -134,18 +129,18 @@ class QuizView extends Component {
                                 Incorrect
                     </DefaultButton>
                         </ButtonContainer>
-                    </ScreenContainer>
+                    </DefaultScreenContainer>
                 }
                 {this.state.quizFinished &&
-                    <ScreenContainer>
+                    <DefaultScreenContainer>
                         <QuestionContainer>
                             <QuestionText>
                                 {this.state.correctAnswersCount} out of {this.state.wrongAnswersCount + this.state.correctAnswersCount} correct
                         </QuestionText>
                         </QuestionContainer>
-                    </ScreenContainer>
+                    </DefaultScreenContainer>
                 }
-            </ScreenContainer>
+            </DefaultScreenContainer>
         )
     }
 }

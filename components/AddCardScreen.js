@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
-import { DefaultScreenContainer, BottomButtonContainer} from './DefaultScreenContainer'
-import { View, Text, TextInput, Picker } from 'react-native'
+import { DefaultScreenContainer, DefaultScreenContainerForInput, BottomButtonContainer} from './DefaultScreenContainer'
+import { View, Text, TextInput, Picker, Button } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import DefaultButton from './DefaultButton'
 import AppStatusBar from './AppStatusBar';
@@ -13,12 +13,10 @@ import { connect } from 'react-redux'
 import { addCardToDeckActionCreator } from '../actions'
 
 const QuestionInput = styled.TextInput`
-    border-color: black;
-    border-width: 1;
     margin-left: 20;
     margin-right: 20;
-    height: 160;
-    max-height: 160;
+    height: 120;
+    max-height: 120;
 `
 
 const QuestionText = styled.Text`
@@ -39,7 +37,7 @@ class AddCardScreen extends Component {
     };
 
     state = {
-        text: '',
+        question: '',
         answer: 'Yes'
     }
 
@@ -60,7 +58,7 @@ class AddCardScreen extends Component {
             () => this.props.dispatch(addCardToDeckActionCreator(this.props.currentDeck.title, card)))
 
         this.setState({
-            text: '',
+            question: '',
             answer: 'Yes'
         })
 
@@ -71,7 +69,7 @@ class AddCardScreen extends Component {
     render() {
         return (
             <DefaultScreenContainer>
-                <AppStatusBar />
+                <DefaultScreenContainerForInput behavior='padding'>
                 <QuestionText>1. Enter your question:</QuestionText>
                 <QuestionInput required
                     multiline={true}
@@ -81,7 +79,7 @@ class AddCardScreen extends Component {
                     value={this.state.question}
                     placeholder='Write a question which can be answered with yes or no'
                 />
-                <CharactersRemainingText>{this.state.text.length}/200 characters</CharactersRemainingText>
+                <CharactersRemainingText>{this.state.question.length}/200 characters</CharactersRemainingText>
                 <View>
                 <QuestionText>2. Select the right answer:</QuestionText>
                 <Picker
@@ -92,10 +90,12 @@ class AddCardScreen extends Component {
                 </Picker>
                 </View>
                 <BottomButtonContainer>
-                    <DefaultButton backgroundColor='black' color='white' onPress={() => this.handleSubmit()}>
-                        Submit
-                    </DefaultButton>
+                    <Button
+                        onPress={() => this.handleSubmit()}
+                        disabled={this.state.question.length === 0} title="Submit">
+                    </Button>
                 </BottomButtonContainer>
+                </DefaultScreenContainerForInput>
             </DefaultScreenContainer>
         )
     }

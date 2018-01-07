@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Button } from 'react-native'
 import styled from 'styled-components/native'
 import { getDeck } from '../data'
 import { connect } from 'react-redux'
+import { DefaultScreenContainer, BottomButtonContainer } from './DefaultScreenContainer'
+import AppStatusBar from './AppStatusBar';
 
 const AddCardButton = styled.TouchableOpacity`
     background-color: white;
@@ -50,16 +52,6 @@ const CardCount = styled.Text`
     color: grey;
 `
 
-const IndividualDeckViewContainer = styled.View`
-    justify-content: space-between;
-    align-items: stretch;
-    flex: 1;
-`
-
-const ButtonContainer = styled.View`
-    margin-bottom: 120;
-`
-
 const MetadataContainer = styled.View`
     margin-top: 120;
     justify-content: center;
@@ -80,12 +72,12 @@ class IndividualDeckView extends Component {
 
     render() {
         return (
-            <IndividualDeckViewContainer>
+            <DefaultScreenContainer>
                 <MetadataContainer >
                     <DeckTitle>{this.props.deck.title}</DeckTitle>
                     <CardCount>{this.props.deck.questions.length} {this.props.deck.questions.length === 1 ? 'card' : 'cards'}</CardCount>
                 </MetadataContainer>
-                <ButtonContainer >
+                <BottomButtonContainer >
                     <AddCardButton onPress={() =>
                         this.props.navigation.navigate(
                             'AddCardScreen',
@@ -94,18 +86,19 @@ class IndividualDeckView extends Component {
                     }>
                         <AddCardButtonText>Add card</AddCardButtonText>
                     </AddCardButton>
-                    <StartQuizButton onPress={() =>
-                        this.props.navigation.navigate(
-                            'QuizScreen',
-                            { deck: this.props.deck }
-                        )
-                    }>
-                        <StartQuizButtonText>
-                            Start quiz
-                        </StartQuizButtonText>
-                    </StartQuizButton>
-                </ButtonContainer>
-            </IndividualDeckViewContainer>
+                    {
+                        this.props.deck.questions.length > 0 &&
+                        <StartQuizButton title='Start Quiz' onPress={() =>
+                            this.props.navigation.navigate(
+                                'QuizScreen',
+                                { deck: this.props.deck }
+                            )
+                        }>
+                        <StartQuizButtonText>Start Quiz</StartQuizButtonText>
+                        </StartQuizButton>
+                    }
+                </BottomButtonContainer>
+            </DefaultScreenContainer>
         )
     }
 }

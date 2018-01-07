@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native'
 
-import { insertCard } from '../util'
+import { insertCard, insertDeck} from '../util'
 
 initialData = {
   React: {
@@ -28,18 +28,25 @@ initialData = {
 }
 
 export function getDecks() {
-  return Promise.resolve(initialData)
+  return AsyncStorage.getItem('decks').then(value => {
+    if(value === null)
+      return initialData
+    else
+      return JSON.parse(value)
+  })
 }
 
-export function getDeck(id) {
-  return Promise.resolve(initialData[id])
-}
-
-export function saveDeckTitle(title) {
+export function saveNewDeck(decks, deck) {
+  const modifiedDecks = insertDeck(decks, deck)
+  console.log("modifiedDecks", modifiedDecks)
+  return AsyncStorage.setItem('decks', JSON.stringify(modifiedDecks))
 
 }
 
 export function addCardToDeck(decks, title, card) {
-  const modifiedDecks = insertCard(decks, title, card)
+  const modifiedDeck = insertCard(decks, title, card)
+  console.log("modifiedDeck", modifiedDeck)
+  const modifiedDecks = insertDeck(decks, modifiedDeck)
+  console.log("modifiedDecks", modifiedDecks)
   return AsyncStorage.setItem('decks', JSON.stringify(modifiedDecks))
 }

@@ -1,20 +1,24 @@
 import {
-    RECEIVE_DECKS,
-    ADD_CARD_TO_DECK
+    RECEIVE_DECKS_ACTION,
+    ADD_CARD_TO_DECK_ACTION,
+    SAVE_DECK_ACTION
 } from '../actions'
 
-import { insertCard } from '../util'
+import { insertCard, insertDeck } from '../util'
 
 function deckReducer(state = {}, action) {
-    console.log(action)
+    console.log('deckReducer action', action)
+    let newState = {}
     switch(action.type) {
-        case RECEIVE_DECKS:
-            return {
+        case RECEIVE_DECKS_ACTION:
+            newState = {
                 ...state,
                 decks: action.decks
             }
-        case ADD_CARD_TO_DECK:
-            return {
+            console.log(JSON.stringify(newState))
+            return newState
+        case ADD_CARD_TO_DECK_ACTION:
+            newState = {
                 ...state,
                 decks: {
                     ...state.decks,
@@ -24,6 +28,15 @@ function deckReducer(state = {}, action) {
                     }
                 }
             }
+            console.log(JSON.stringify(newState))
+            return newState
+        case SAVE_DECK_ACTION:
+            newState = {
+                ...state,
+                decks: insertDeck(state.decks, action.deck)
+            }
+            console.log(JSON.stringify(newState))
+            return newState
         default:
             return state
     }

@@ -12,40 +12,49 @@ import IndividualDeckView from './components/IndividualDeckView'
 import NewDeckScreen from './components/NewDeckScreen'
 import QuizScreen from './components/QuizScreen'
 import AddCardScreen from './components/AddCardScreen'
+import AppStatusBar from './components/AppStatusBar'
 
-
-export default class App extends React.Component {
-  render() {
-    return (
-      <Provider store={createStore(reducer)}>
-        <MainNavigator />
-      </Provider>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
+import { setLocalNotification, clearLocalNotification } from './util'
 
 const Tabs = TabNavigator({
   DeckListScreen: {
-    screen: DeckListScreen
+    screen: DeckListScreen,
+
   },
   NewDeckScreen: {
     screen: NewDeckScreen
   },
+}, {
+  navigationOptions: {
+    header: null}
 });
 
 const MainNavigator = StackNavigator({
-  Tabs: {screen: Tabs},
+  Tabs: {
+    screen: Tabs,
+    navigationOptions: {
+      headerMode: 'none'
+    }
+  },
   IndividualDeckView: {screen: IndividualDeckView},
   QuizScreen: { screen: QuizScreen},
   AddCardScreen: { screen: AddCardScreen}
 });
+
+
+export default class App extends React.Component {
+  componentDidMount() {
+    setLocalNotification()
+  }
+
+  render() {
+    return (
+      <Provider store={createStore(reducer)}>
+        <View style={{flex: 1}}>
+          <AppStatusBar />
+          <MainNavigator />
+        </View>
+      </Provider>
+    );
+  }
+}
