@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import AppStatusBar from './AppStatusBar';
 import DefaultButton from './DefaultButton'
 import styled from 'styled-components/native'
-import { DefaultScreenContainer, BottomButtonContainer} from './DefaultScreenContainer'
-import { setLocalNotification, clearLocalNotification} from '../util'
+import { DefaultScreenContainer, BottomButtonContainer } from './DefaultScreenContainer'
+import { setLocalNotification, clearLocalNotification } from '../util'
 
 const ANSWER_YES = 'Yes'
 const ANSWER_NO = 'No'
@@ -52,7 +52,7 @@ class QuizView extends Component {
 
         const newQuizFinishedValue = this.state.questionIndex === this.state.questionsCount - 1
 
-        if(newQuizFinishedValue) {
+        if (newQuizFinishedValue) {
             clearLocalNotification().then(setLocalNotification)
         }
 
@@ -82,6 +82,14 @@ class QuizView extends Component {
         this.setState({
             viewAnswer: !this.state.viewAnswer
         })
+    }
+
+    navigateToDeck = () => {
+        this.props.navigation.navigate('IndividualDeckView', {key: this.state.deck.title})
+    }
+
+    restartQuiz = () => {
+        this.props.navigation.navigate('QuizScreen', {deck: this.state.deck})
     }
 
 
@@ -138,6 +146,14 @@ class QuizView extends Component {
                                 {this.state.correctAnswersCount} out of {this.state.wrongAnswersCount + this.state.correctAnswersCount} correct
                         </QuestionText>
                         </QuestionContainer>
+                        <ButtonContainer>
+                            <DefaultButton backgroundColor='white' color='black' onPress={() => this.restartQuiz()}>
+                                Restart Quiz
+                    </DefaultButton>
+                            <DefaultButton backgroundColor='black' color='white' onPress={() => this.navigateToDeck()}>
+                                Back to Deck
+                    </DefaultButton>
+                        </ButtonContainer>
                     </DefaultScreenContainer>
                 }
             </DefaultScreenContainer>
