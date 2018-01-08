@@ -104,7 +104,6 @@ class IndividualDeckView extends Component {
 }
 
 mapStateToProps = (state, ownProps) => {
-
     console.log('IndividualDeckView mapStateToProps', {
         key: ownProps.navigation.state.params.key,
         decks: state.decks,

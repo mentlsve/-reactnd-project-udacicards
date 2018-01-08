@@ -44,14 +44,19 @@ class NewDeckScreen extends Component {
             questions: []
         }
 
-        saveNewDeck(this.props.decks, deck).then(
-            () => this.props.dispatch(saveDeckActionCreator(deck)))
+        saveNewDeck(this.props.decks, deck)
+        .then(
+            () => this.props.dispatch(saveDeckActionCreator(deck))
+        )
+        .then(
+            () => this.props.navigation.navigate('IndividualDeckView', {key: deck.title})
+        )
 
         this.setState({
             title: '',
         })
 
-        this.props.navigation.goBack()
+
     }
 
     render() {
